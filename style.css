@@ -1,0 +1,239 @@
+/* Reset básico e fonte padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8; /* Cor de fundo suave */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; /* Espaçamento nas bordas */
+}
+
+/* Container principal da calculadora */
+.container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Largura máxima */
+    width: 100%; /* Ocupa 100% até o max-width */
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50; /* Azul escuro */
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Estilo dos grupos de input */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left; /* Alinha label e input à esquerda */
+}
+
+.input-group label {
+    display: block; /* Coloca o label em linha separada */
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3498db; /* Azul ao focar */
+}
+
+/* Estilo do botão */
+button#calcularBtn {
+    background-color: #3498db; /* Azul */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Ocupa toda a largura */
+    margin-top: 10px;
+}
+
+button#calcularBtn:hover {
+    background-color: #2980b9; /* Azul mais escuro no hover */
+}
+
+/* Área de Resultado */
+.resultado-area {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #eaf6ff; /* Fundo azul claro */
+    border-radius: 8px;
+    border-left: 5px solid #3498db; /* Borda lateral azul */
+    text-align: left;
+    animation: fadeIn 0.5s ease; /* Animação suave */
+}
+
+.resultado-area h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.resultado-area p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+
+#imcValor {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #3498db;
+}
+
+#imcClassificacao {
+    font-weight: 600;
+}
+
+/* Cores para classificação (serão adicionadas via JS) */
+.resultado-area.abaixo { border-left-color: #f1c40f; background-color: #fef9e7;} /* Amarelo */
+.resultado-area.normal { border-left-color: #2ecc71; background-color: #eafaf1;} /* Verde */
+.resultado-area.sobrepeso { border-left-color: #f39c12; background-color: #fef5e7;} /* Laranja */
+.resultado-area.obesidade1 { border-left-color: #e67e22; background-color: #fdf3e6;} /* Laranja escuro */
+.resultado-area.obesidade2 { border-left-color: #e74c3c; background-color: #feeeee;} /* Vermelho */
+.resultado-area.obesidade3 { border-left-color: #c0392b; background-color: #f9ebea;} /* Vermelho escuro */
+
+
+/* Mensagem de Erro */
+.erro-mensagem {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fdecea; /* Fundo vermelho claro */
+    color: #c0392b; /* Vermelho escuro */
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Tabela de Informação */
+.info-tabela {
+    margin-top: 35px;
+    text-align: left;
+}
+
+.info-tabela h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.info-tabela table {
+    width: 100%;
+    border-collapse: collapse; /* Junta as bordas */
+    font-size: 0.9rem;
+}
+
+.info-tabela th, .info-tabela td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.info-tabela th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+.info-tabela tr:nth-child(even) { /* Linhas pares com fundo diferente */
+    background-color: #f9f9f9;
+}
+
+/* Animação Fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* --- Responsividade --- */
+
+/* Telas menores (ex: smartphones) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduz espaçamento nas bordas */
+        align-items: flex-start; /* Alinha ao topo para evitar corte com teclado virtual */
+        padding-top: 20px;
+    }
+
+    .container {
+        padding: 20px; /* Reduz padding interno */
+        margin-top: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Reduz tamanho do título */
+        margin-bottom: 20px;
+    }
+
+    .input-group input {
+        padding: 10px 12px;
+    }
+
+    button#calcularBtn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .resultado-area {
+        padding: 15px;
+        margin-top: 25px;
+    }
+
+     .resultado-area h2 {
+        font-size: 1.1rem;
+    }
+     .resultado-area p {
+        font-size: 1rem;
+    }
+     #imcValor {
+        font-size: 1.2rem;
+    }
+
+    .info-tabela table {
+        font-size: 0.8rem;
+    }
+
+    .info-tabela th, .info-tabela td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+     .container {
+        padding: 15px;
+    }
+     h1 {
+        font-size: 1.6rem;
+    }
+}
