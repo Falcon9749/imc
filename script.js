@@ -1,115 +1,164 @@
-// Aguarda o HTML carregar completamente antes de executar o script
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM Carregado. Script iniciado."); // Log 1: Confirma que o script começou
+    console.log("DOM Carregado. Script iniciado.");
 
-    // Seleciona os elementos do HTML
+    // --- Seleção dos Elementos ---
     const pesoInput = document.getElementById('peso');
     const alturaInput = document.getElementById('altura');
     const calcularBtn = document.getElementById('calcularBtn');
     const resultadoDiv = document.getElementById('resultado');
     const imcValorP = document.getElementById('imcValor');
-    const imcClassificacaoP = document.getElementById('imcClassificacao');
+    // Mudança: ID para interpretação/classificação
+    const imcInterpretacaoP = document.getElementById('imcInterpretacao');
+    const infoAdicionalP = document.getElementById('infoAdicional'); // Novo P para infos extras
     const erroDiv = document.getElementById('erro');
+    const erroMensagemP = erroDiv.querySelector('p'); // Seleciona o P dentro da div de erro
 
-    // Verifica se os elementos foram encontrados
-    if (!pesoInput || !alturaInput || !calcularBtn || !resultadoDiv || !imcValorP || !imcClassificacaoP || !erroDiv) {
-        console.error("Erro: Um ou mais elementos do HTML não foram encontrados. Verifique os IDs."); // Log 2: Erro se algum ID estiver errado
-        return; // Para a execução se elementos não forem achados
-    } else {
-        console.log("Elementos do HTML encontrados com sucesso."); // Log 3: Confirma que os elementos foram selecionados
+    // Novos elementos para tipo, idade e sexo
+    const tipoUsuarioRadios = document.querySelectorAll('input[name="tipoUsuario"]');
+    const infoCriancaDiv = document.getElementById('infoCrianca');
+    const idadeInput = document.getElementById('idade');
+    const sexoRadios = document.querySelectorAll('input[name="sexo"]');
+
+    // Verifica elementos essenciais
+    if (!pesoInput || !alturaInput || !calcularBtn || !resultadoDiv || !imcValorP || !imcInterpretacaoP || !erroDiv || !infoCriancaDiv || !idadeInput || !infoAdicionalP) {
+        console.error("Erro: Um ou mais elementos do HTML não foram encontrados. Verifique os IDs.");
+        if (erroMensagemP) erroMensagemP.textContent = "Erro interno na página. Elemento não encontrado.";
+        erroDiv.style.display = 'block';
+        return;
     }
+    console.log("Elementos do HTML encontrados.");
 
-    // Adiciona um ouvinte de evento ao botão de calcular
-    calcularBtn.addEventListener('click', calcularIMC);
-    console.log("Ouvinte de clique adicionado ao botão."); // Log 4: Confirma que o ouvinte foi adicionado
+    // --- Event Listeners ---
 
-    // Adiciona ouvintes para limpar erro/resultado ao digitar
+    // Listener para mostrar/ocultar campos de criança
+    tipoUsuarioRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (document.querySelector('input[name="tipoUsuario"]:checked').value === 'crianca') {
+                infoCriancaDiv.style.display = 'block';
+            } else {
+                infoCriancaDiv.style.display = 'none';
+            }
+            limparFeedback(); // Limpa resultados/erros ao mudar o tipo
+        });
+    });
+
+    // Listener para o botão de calcular
+    calcularBtn.addEventListener('click', processarCalculo);
+    console.log("Ouvinte de clique adicionado ao botão.");
+
+    // Listeners para limpar feedback ao digitar
     pesoInput.addEventListener('input', limparFeedback);
     alturaInput.addEventListener('input', limparFeedback);
+    idadeInput.addEventListener('input', limparFeedback); // Limpa ao digitar idade também
+    sexoRadios.forEach(radio => radio.addEventListener('change', limparFeedback)); // Limpa ao mudar sexo
 
-    function calcularIMC() {
-        console.log("Botão 'Calcular IMC' clicado."); // Log 5: Confirma que a função foi chamada
+    // --- Funções ---
 
-        // Pega os valores dos inputs
-        const pesoStr = pesoInput.value;
-        const alturaStr = alturaInput.value;
-        console.log(`Valores lidos - Peso: ${pesoStr}, Altura: ${alturaStr}`); // Log 6: Mostra os valores como string
+    function processarCalculo() {
+        console.log("Botão 'Calcular IMC' clicado.");
+        limparFeedback(); // Garante que feedbacks antigos sejam limpos
 
-        // Converte para número (float)
-        const peso = parseFloat(pesoStr);
-        const altura = parseFloat(alturaStr);
-        console.log(`Valores convertidos - Peso: ${peso}, Altura: ${altura}`); // Log 7: Mostra os valores após parseFloat
+        // --- Leitura e Validação dos Inputs ---
+        const tipoSelecionado = document.querySelector('input[name="tipoUsuario"]:checked')?.value;
+        const peso = parseFloat(pesoInput.value);
+        const altura = parseFloat(alturaInput.value);
 
-        // Validação: Verifica se os valores são números válidos e positivos
+        // Validação básica (peso e altura)
         if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
-            console.error("Erro de validação: Peso ou altura inválidos.", { peso, altura }); // Log 8: Erro de validação
-            mostrarErro('Por favor, insira valores numéricos válidos e positivos para peso (kg) e altura (m). Use ponto (.) para decimais.');
-            return; // Para a execução se inválido
+            mostrarErro('Por favor, insira peso e altura válidos (use ponto "." para decimais).');
+            return;
         }
 
-        // Calcula o IMC: peso / (altura * altura)
+        let idade = null;
+        let sexo = null;
+
+        // Validação específica para Criança/Adolescente
+        if (tipoSelecionado === 'crianca') {
+            idade = parseInt(idadeInput.value);
+            sexo = document.querySelector('input[name="sexo"]:checked')?.value;
+
+            if (isNaN(idade) || idade < 2 || idade > 19) {
+                mostrarErro('Por favor, insira uma idade válida (entre 2 e 19 anos).');
+                return;
+            }
+            if (!sexo) {
+                mostrarErro('Por favor, selecione o sexo.');
+                return;
+            }
+            console.log(`Dados Criança: Idade=${idade}, Sexo=${sexo}`);
+        }
+
+        // --- Cálculo do IMC (igual para todos) ---
         const imc = peso / (altura * altura);
-        console.log(`IMC Calculado: ${imc}`); // Log 9: Mostra o IMC calculado
-
-        // Formata o IMC para uma casa decimal
         const imcFormatado = imc.toFixed(1);
+        console.log(`IMC Calculado: ${imcFormatado}`);
 
-        // Determina a classificação e a classe CSS correspondente
-        const { classificacao, classeCss } = getClassificacaoIMC(imc);
-        console.log(`Classificação: ${classificacao}, Classe CSS: ${classeCss}`); // Log 10: Mostra a classificação
+        // --- Interpretação Baseada no Tipo ---
+        let interpretacao = '';
+        let classeCss = 'default'; // Classe padrão
+        let infoAdicional = '';
 
-        // Exibe o resultado formatado
-        mostrarResultado(imcFormatado, classificacao, classeCss);
-    }
+        if (tipoSelecionado === 'adulto') {
+            const resultadoAdulto = getClassificacaoIMCAdulto(imc);
+            interpretacao = `Classificação: ${resultadoAdulto.classificacao}`;
+            classeCss = resultadoAdulto.classeCss;
+            infoAdicional = 'Lembre-se que o IMC é uma ferramenta de triagem. Consulte um profissional para avaliação completa.';
+            console.log(`Adulto - Classificação: ${resultadoAdulto.classificacao}`);
 
-    function getClassificacaoIMC(imc) {
-        // (O código desta função permanece o mesmo)
-        if (imc < 18.5) {
-            return { classificacao: 'Abaixo do peso', classeCss: 'abaixo' };
-        } else if (imc >= 18.5 && imc <= 24.9) {
-            return { classificacao: 'Peso normal', classeCss: 'normal' };
-        } else if (imc >= 25.0 && imc <= 29.9) {
-            return { classificacao: 'Sobrepeso', classeCss: 'sobrepeso' };
-        } else if (imc >= 30.0 && imc <= 34.9) {
-            return { classificacao: 'Obesidade Grau I', classeCss: 'obesidade1' };
-        } else if (imc >= 35.0 && imc <= 39.9) {
-            return { classificacao: 'Obesidade Grau II', classeCss: 'obesidade2' };
-        } else { // imc >= 40.0
-            return { classificacao: 'Obesidade Grau III (Mórbida)', classeCss: 'obesidade3' };
+        } else if (tipoSelecionado === 'crianca') {
+            interpretacao = `O IMC calculado é ${imcFormatado}.`;
+            infoAdicional = `Para crianças/adolescentes de ${idade} anos (${sexo}), este valor deve ser comparado com gráficos de percentil de IMC por idade e sexo. Consulte um pediatra ou use ferramentas como as do CDC/OMS.`;
+            // Poderíamos ter classes CSS diferentes para crianças, mas vamos usar a 'default' por ora
+            // classeCss = 'crianca-info'; // Exemplo, se quiséssemos estilo específico
+            console.log(`Criança - Interpretação: Avaliar com percentis.`);
         }
+
+        // --- Exibir Resultado ---
+        mostrarResultado(imcFormatado, interpretacao, classeCss, infoAdicional);
     }
 
-    function mostrarResultado(imc, classificacao, classeCss) {
-        console.log("Mostrando resultado..."); // Log 11: Confirma entrada na função de mostrar resultado
+    function getClassificacaoIMCAdulto(imc) {
+        // Mesma lógica de antes, retorna { classificacao: '...', classeCss: '...' }
+        if (imc < 18.5) return { classificacao: 'Abaixo do peso', classeCss: 'abaixo' };
+        if (imc < 25.0) return { classificacao: 'Peso normal', classeCss: 'normal' };
+        if (imc < 30.0) return { classificacao: 'Sobrepeso', classeCss: 'sobrepeso' };
+        if (imc < 35.0) return { classificacao: 'Obesidade Grau I', classeCss: 'obesidade1' };
+        if (imc < 40.0) return { classificacao: 'Obesidade Grau II', classeCss: 'obesidade2' };
+        return { classificacao: 'Obesidade Grau III', classeCss: 'obesidade3' };
+    }
+
+    function mostrarResultado(imc, interpretacaoResultado, classeCss, infoAdicionalTexto = '') {
+        console.log("Mostrando resultado...");
         imcValorP.textContent = `Seu IMC: ${imc}`;
-        imcClassificacaoP.textContent = `Classificação: ${classificacao}`;
+        imcInterpretacaoP.textContent = interpretacaoResultado;
+        infoAdicionalP.textContent = infoAdicionalTexto;
 
-        // Remove classes de cor anteriores antes de adicionar a nova
+        // Limpa classes antigas e adiciona a nova
         resultadoDiv.className = 'resultado-area'; // Reseta para a classe base
-        resultadoDiv.classList.add(classeCss); // Adiciona a nova classe de cor
+        if (classeCss !== 'default') { // Adiciona classe de cor apenas se não for default
+             resultadoDiv.classList.add(classeCss);
+        }
 
-        resultadoDiv.style.display = 'block'; // Torna a área de resultado visível
-        erroDiv.style.display = 'none';    // Esconde a área de erro
-        console.log("Resultado exibido."); // Log 12: Confirma exibição do resultado
+        resultadoDiv.style.display = 'block';
+        erroDiv.style.display = 'none';
+        console.log("Resultado exibido.");
     }
 
     function mostrarErro(mensagem) {
-        console.log("Mostrando erro:", mensagem); // Log 13: Confirma entrada na função de mostrar erro
-        erroDiv.querySelector('p').textContent = mensagem; // Atualiza a mensagem de erro
-        erroDiv.style.display = 'block';    // Torna a área de erro visível
-        resultadoDiv.style.display = 'none'; // Esconde a área de resultado
+        console.log("Mostrando erro:", mensagem);
+        erroMensagemP.textContent = mensagem; // Atualiza a mensagem de erro no parágrafo
+        erroDiv.style.display = 'block';
+        resultadoDiv.style.display = 'none';
     }
 
     function limparFeedback() {
-        // Esconde as áreas de erro e resultado quando o usuário começa a digitar novamente
-         if (erroDiv.style.display === 'block') {
-             erroDiv.style.display = 'none';
-             console.log("Feedback de erro limpo."); // Log 14: Confirma limpeza do erro
-         }
-         // Opcional: esconder resultado ao digitar novamente
-         // if (resultadoDiv.style.display === 'block') {
-         //     resultadoDiv.style.display = 'none';
-         //     console.log("Feedback de resultado limpo."); // Log 15: Confirma limpeza do resultado (se descomentado)
-         // }
+        erroDiv.style.display = 'none';
+        resultadoDiv.style.display = 'none';
+        // Limpa também os textos para evitar mostrar info antiga rapidamente
+        imcValorP.textContent = '';
+        imcInterpretacaoP.textContent = '';
+        infoAdicionalP.textContent = '';
+        erroMensagemP.textContent = ''; // Limpa texto do erro também
+        console.log("Feedback limpo.");
     }
 });

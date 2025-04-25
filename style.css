@@ -1,239 +1,433 @@
-/* Reset básico e fonte padrão */
+/* === Reset Básico e Configurações Globais === */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth; /* Rolagem suave */
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f0f4f8; /* Cor de fundo suave */
-    color: #333;
+    /* Fundo com gradiente suave */
+    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); /* Tons de verde-água claros */
+    color: #444; /* Cor de texto principal mais suave */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px; /* Espaçamento nas bordas */
+    padding: 25px; /* Espaçamento nas bordas */
+    line-height: 1.6;
 }
 
-/* Container principal da calculadora */
+/* === Container Principal === */
 .container {
     background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 500px; /* Largura máxima */
-    width: 100%; /* Ocupa 100% até o max-width */
+    padding: 35px 45px;
+    border-radius: 16px; /* Bordas mais arredondadas */
+    /* Sombra mais pronunciada e suave */
+    box-shadow: 0 12px 35px rgba(0, 87, 75, 0.15);
+    max-width: 550px; /* Um pouco mais largo */
+    width: 100%;
     text-align: center;
+    border: 1px solid #e0e0e0; /* Borda sutil */
 }
 
+/* === Títulos e Textos === */
 h1 {
-    color: #2c3e50; /* Azul escuro */
-    margin-bottom: 25px;
+    color: #004d40; /* Verde escuro (quase preto) */
+    margin-bottom: 10px;
     font-weight: 600;
+    font-size: 2.2rem; /* Maior */
 }
 
-/* Estilo dos grupos de input */
+.subtitle {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* === Estilos de Formulário (Inputs, Labels, Botões) === */
 .input-group {
-    margin-bottom: 20px;
-    text-align: left; /* Alinha label e input à esquerda */
+    margin-bottom: 22px;
+    text-align: left;
 }
 
-.input-group label {
-    display: block; /* Coloca o label em linha separada */
+.input-group label,
+.tipo-selecao > label,
+.sexo-selecao > label { /* Label principal do grupo */
+    display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #555;
+    color: #004d40; /* Verde escuro */
+    font-size: 0.95rem;
 }
 
-.input-group input {
+.input-group input[type="number"] {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 14px 18px; /* Mais padding interno */
+    border: 1px solid #cce0dd; /* Borda verde-água clara */
+    border-radius: 8px; /* Bordas arredondadas */
     font-size: 1rem;
     font-family: 'Poppins', sans-serif;
-    transition: border-color 0.3s ease;
+    background-color: #fafffd; /* Fundo quase branco */
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.input-group input:focus {
+.input-group input[type="number"]:focus {
     outline: none;
-    border-color: #3498db; /* Azul ao focar */
+    border-color: #00796b; /* Verde mais forte no foco */
+    /* Sombra sutil no foco */
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15);
 }
 
-/* Estilo do botão */
+/* Estilo para Placeholder */
+.input-group input[type="number"]::placeholder {
+    color: #99c7c3; /* Verde-água acinzentado */
+    opacity: 1; /* Garante visibilidade */
+}
+
+
+/* Seleção de Tipo e Sexo (Radio) */
+.tipo-selecao, .sexo-selecao {
+    margin-bottom: 25px;
+    text-align: left;
+    background-color: #f8fdfc;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0f2f1;
+}
+
+.tipo-selecao div, .sexo-selecao div {
+    display: flex; /* Alinha radio e label facilmente */
+    align-items: center;
+    margin-bottom: 8px; /* Espaço entre opções */
+}
+.tipo-selecao div:last-child, .sexo-selecao div:last-child {
+    margin-bottom: 0;
+}
+
+.tipo-selecao input[type="radio"],
+.sexo-selecao input[type="radio"] {
+    /* Aparência customizada (Opcional, mas melhora muito) */
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #80cbc4; /* Borda verde-água */
+    border-radius: 50%; /* Círculo */
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    top: -1px; /* Ajuste fino vertical */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.tipo-selecao input[type="radio"]:checked,
+.sexo-selecao input[type="radio"]:checked {
+    border-color: #00796b; /* Verde forte quando selecionado */
+    background-color: #00796b; /* Preenche o círculo */
+}
+
+/* Adiciona um ponto interno (pseudo-elemento) */
+.tipo-selecao input[type="radio"]:checked::after,
+.sexo-selecao input[type="radio"]:checked::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tipo-selecao label,
+.sexo-selecao label { /* Labels dos radios individuais */
+    font-weight: 500; /* Peso normal */
+    color: #333;
+    cursor: pointer;
+    flex-grow: 1; /* Ocupa espaço restante */
+    margin-bottom: 0; /* Reset margin */
+    display: inline-block; /* Necessário com flex */
+}
+
+
+/* Grupo de Informações da Criança */
+.info-crianca-group {
+    border: none; /* Remove borda antiga */
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: #e0f2f1; /* Fundo verde-água bem claro */
+    animation: fadeIn 0.5s ease; /* Animação suave ao aparecer */
+}
+.info-crianca-group .input-group {
+    margin-bottom: 18px;
+}
+.info-crianca-group .input-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Botão Principal */
 button#calcularBtn {
-    background-color: #3498db; /* Azul */
+    background-color: #00796b; /* Verde principal */
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-size: 1.1rem;
+    padding: 15px 30px; /* Botão maior */
+    border-radius: 8px;
+    font-size: 1.15rem; /* Fonte maior */
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%; /* Ocupa toda a largura */
-    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    width: 100%;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 121, 107, 0.2); /* Sombra do botão */
 }
 
 button#calcularBtn:hover {
-    background-color: #2980b9; /* Azul mais escuro no hover */
+    background-color: #00695c; /* Verde mais escuro no hover */
+    transform: translateY(-2px); /* Efeito sutil de levantar */
+    box-shadow: 0 6px 20px rgba(0, 121, 107, 0.3);
+}
+button#calcularBtn:active {
+     transform: translateY(0); /* Volta ao normal ao clicar */
+     box-shadow: 0 4px 15px rgba(0, 121, 107, 0.2);
 }
 
-/* Área de Resultado */
+
+/* === Área de Resultado === */
 .resultado-area {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #eaf6ff; /* Fundo azul claro */
-    border-radius: 8px;
-    border-left: 5px solid #3498db; /* Borda lateral azul */
+    margin-top: 35px;
+    padding: 25px;
+    background-color: #f1f8f7; /* Fundo muito claro */
+    border-radius: 12px; /* Bordas arredondadas */
+    border: 1px solid #d0eae7;
+    border-left-width: 6px; /* Borda lateral mais grossa */
+    border-left-color: #80cbc4; /* Cor padrão da borda (verde-água) */
     text-align: left;
-    animation: fadeIn 0.5s ease; /* Animação suave */
+    animation: fadeIn 0.6s ease;
+    transition: border-left-color 0.4s ease; /* Transição suave da cor da borda */
 }
 
 .resultado-area h2 {
-    color: #2c3e50;
+    color: #004d40; /* Verde escuro */
     margin-bottom: 15px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
 }
 
 .resultado-area p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 5px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 8px;
+    color: #333;
 }
 
 #imcValor {
     font-weight: 600;
-    font-size: 1.3rem;
-    color: #3498db;
+    font-size: 1.5rem; /* Maior destaque */
+    color: #00796b; /* Verde principal */
 }
 
-#imcClassificacao {
-    font-weight: 600;
+#imcInterpretacao {
+    font-weight: 500; /* Levemente mais forte */
 }
 
-/* Cores para classificação (serão adicionadas via JS) */
-.resultado-area.abaixo { border-left-color: #f1c40f; background-color: #fef9e7;} /* Amarelo */
-.resultado-area.normal { border-left-color: #2ecc71; background-color: #eafaf1;} /* Verde */
-.resultado-area.sobrepeso { border-left-color: #f39c12; background-color: #fef5e7;} /* Laranja */
-.resultado-area.obesidade1 { border-left-color: #e67e22; background-color: #fdf3e6;} /* Laranja escuro */
-.resultado-area.obesidade2 { border-left-color: #e74c3c; background-color: #feeeee;} /* Vermelho */
-.resultado-area.obesidade3 { border-left-color: #c0392b; background-color: #f9ebea;} /* Vermelho escuro */
+#infoAdicional {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 15px;
+    font-style: italic;
+    border-top: 1px dashed #cce0dd; /* Separador sutil */
+    padding-top: 10px;
+}
+
+/* Cores da Borda Lateral por Classificação */
+.resultado-area.abaixo { border-left-color: #ffca28; } /* Amarelo Âmbar */
+.resultado-area.normal { border-left-color: #66bb6a; } /* Verde Médio */
+.resultado-area.sobrepeso { border-left-color: #ffa726; } /* Laranja Claro */
+.resultado-area.obesidade1 { border-left-color: #ff7043; } /* Laranja Avermelhado */
+.resultado-area.obesidade2 { border-left-color: #ef5350; } /* Vermelho Claro */
+.resultado-area.obesidade3 { border-left-color: #d32f2f; } /* Vermelho Escuro */
 
 
-/* Mensagem de Erro */
+/* === Mensagem de Erro === */
 .erro-mensagem {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #fdecea; /* Fundo vermelho claro */
-    color: #c0392b; /* Vermelho escuro */
-    border: 1px solid #e74c3c;
-    border-radius: 5px;
+    margin-top: 25px;
+    padding: 15px 20px;
+    background-color: #ffebee; /* Fundo vermelho muito claro */
+    color: #c62828; /* Vermelho escuro */
+    border: 1px solid #ef9a9a; /* Borda vermelha clara */
+    border-left: 5px solid #e53935; /* Borda lateral vermelha */
+    border-radius: 8px;
     text-align: center;
+    font-weight: 500;
     animation: fadeIn 0.5s ease;
+}
+.erro-mensagem p {
+    margin: 0;
+}
+
+/* === Seção de Informações Gerais === */
+.info-geral {
+    margin-top: 45px;
+    text-align: left;
+    border-top: 1px solid #b2dfdb; /* Separador verde-água */
+    padding-top: 30px;
+}
+.info-geral h3 {
+     text-align: center;
+     margin-bottom: 25px;
+     color: #004d40;
+     font-weight: 600;
+     font-size: 1.4rem;
+}
+.info-geral h4 {
+    color: #00796b; /* Verde principal */
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    border-bottom: 2px solid #e0f2f1; /* Linha sutil abaixo do h4 */
+    padding-bottom: 5px;
+}
+.info-geral p, .info-geral li {
+    font-size: 0.95rem; /* Leitura confortável */
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 12px;
+}
+.info-geral ul {
+    list-style: disc; /* Estilo de lista padrão */
+    margin-left: 25px;
+    margin-bottom: 20px;
+}
+.info-geral li::marker {
+     color: #00796b; /* Cor do marcador da lista */
+}
+.info-geral .nota {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #666;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f1f8f7;
+    border-radius: 6px;
+    border-left: 3px solid #80cbc4;
+}
+
+/* Estilos para Links */
+.info-geral a {
+    color: #00796b; /* Verde principal */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+.info-geral a:hover {
+    color: #004d40; /* Verde escuro no hover */
+    text-decoration: underline;
 }
 
 /* Tabela de Informação */
-.info-tabela {
-    margin-top: 35px;
-    text-align: left;
+.info-geral table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 0.9rem;
+     margin-top: 15px;
+     margin-bottom: 20px;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra sutil na tabela */
+     border-radius: 8px; /* Borda arredondada na tabela */
+     overflow: hidden; /* Garante que o raio da borda funcione */
+}
+.info-geral th, .info-geral td {
+     border: none; /* Remove bordas internas antigas */
+     border-bottom: 1px solid #e0f2f1; /* Linhas horizontais sutis */
+     padding: 12px 10px; /* Mais padding */
+     text-align: center;
+}
+.info-geral th {
+     background-color: #e0f2f1; /* Fundo do cabeçalho verde bem claro */
+     font-weight: 600;
+     color: #004d40;
+     font-size: 0.95rem;
+}
+/* Remove a borda da última linha */
+.info-geral tr:last-child td {
+    border-bottom: none;
+}
+/* Cor de fundo alternada para linhas (zebra) */
+.info-geral tbody tr:nth-child(even) {
+    background-color: #f8fdfc;
 }
 
-.info-tabela h3 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.info-tabela table {
-    width: 100%;
-    border-collapse: collapse; /* Junta as bordas */
-    font-size: 0.9rem;
-}
-
-.info-tabela th, .info-tabela td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-}
-
-.info-tabela th {
-    background-color: #f2f2f2;
-    font-weight: 600;
-}
-
-.info-tabela tr:nth-child(even) { /* Linhas pares com fundo diferente */
-    background-color: #f9f9f9;
-}
-
-/* Animação Fade-in */
+/* === Animações === */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-
-/* --- Responsividade --- */
-
-/* Telas menores (ex: smartphones) */
+/* === Responsividade === */
 @media (max-width: 600px) {
     body {
-        padding: 10px; /* Reduz espaçamento nas bordas */
-        align-items: flex-start; /* Alinha ao topo para evitar corte com teclado virtual */
+        padding: 15px; /* Menos padding no body */
+        align-items: flex-start; /* Alinha ao topo em telas pequenas */
         padding-top: 20px;
     }
-
     .container {
-        padding: 20px; /* Reduz padding interno */
+        padding: 25px 20px; /* Menos padding interno */
         margin-top: 10px;
+        border-radius: 12px; /* Mantém borda arredondada */
     }
-
     h1 {
-        font-size: 1.8rem; /* Reduz tamanho do título */
-        margin-bottom: 20px;
+        font-size: 1.9rem; /* Título menor */
     }
-
-    .input-group input {
-        padding: 10px 12px;
+    .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
     }
-
+    .input-group input[type="number"] {
+        padding: 12px 15px;
+    }
     button#calcularBtn {
-        padding: 10px 20px;
-        font-size: 1rem;
+        padding: 14px 25px;
+        font-size: 1.05rem;
+    }
+
+    /* Garante que radios fiquem legíveis */
+    .tipo-selecao div, .sexo-selecao div {
+         display: flex; /* Mantém flex para bom alinhamento */
+         margin-right: 0; /* Remove margem direita */
     }
 
     .resultado-area {
-        padding: 15px;
-        margin-top: 25px;
+        padding: 20px;
+        margin-top: 30px;
     }
+    .resultado-area h2 { font-size: 1.2rem; }
+    .resultado-area p { font-size: 1rem; }
+    #imcValor { font-size: 1.3rem; }
 
-     .resultado-area h2 {
-        font-size: 1.1rem;
+    .info-geral {
+        margin-top: 35px;
+        padding-top: 25px;
     }
-     .resultado-area p {
-        font-size: 1rem;
-    }
-     #imcValor {
-        font-size: 1.2rem;
-    }
-
-    .info-tabela table {
-        font-size: 0.8rem;
-    }
-
-    .info-tabela th, .info-tabela td {
-        padding: 8px;
-    }
+     .info-geral h3 { font-size: 1.3rem; }
+     .info-geral p, .info-geral li, .info-geral table { font-size: 0.9rem; }
+     .info-geral th, .info-geral td { padding: 10px 8px; }
 }
 
 @media (max-width: 400px) {
-     .container {
-        padding: 15px;
-    }
-     h1 {
-        font-size: 1.6rem;
-    }
+     .container { padding: 20px 15px; }
+     h1 { font-size: 1.7rem; }
+     .subtitle { font-size: 0.85rem; }
+     .input-group input[type="number"] { padding: 11px 14px; }
+      button#calcularBtn { padding: 12px 20px; font-size: 1rem; }
 }

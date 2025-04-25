@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de IMC</title>
+    <title>Calculadora de IMC - Adultos e Crianças</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,68 +12,87 @@
 <body>
     <div class="container">
         <h1>Calculadora de IMC</h1>
+        <p class="subtitle">Para Adultos e Crianças/Adolescentes (2-19 anos)</p>
+
+        <div class="input-group tipo-selecao">
+            <label>Calcular para:</label>
+            <div>
+                <input type="radio" id="tipoAdulto" name="tipoUsuario" value="adulto" checked>
+                <label for="tipoAdulto">Adulto (20+ anos)</label>
+            </div>
+            <div>
+                <input type="radio" id="tipoCrianca" name="tipoUsuario" value="crianca">
+                <label for="tipoCrianca">Criança/Adolescente (2-19 anos)</label>
+            </div>
+        </div>
 
         <div class="input-group">
             <label for="peso">Peso (kg):</label>
             <input type="number" id="peso" placeholder="Ex: 70.5" step="0.1" min="1">
         </div>
-
         <div class="input-group">
             <label for="altura">Altura (m):</label>
             <input type="number" id="altura" placeholder="Ex: 1.75" step="0.01" min="0.5">
         </div>
 
+        <div id="infoCrianca" class="info-crianca-group" style="display: none;">
+             <div class="input-group">
+                <label for="idade">Idade (anos):</label>
+                <input type="number" id="idade" placeholder="Ex: 10" step="1" min="2" max="19">
+             </div>
+             <div class="input-group sexo-selecao">
+                <label>Sexo:</label>
+                <div>
+                    <input type="radio" id="sexoMasc" name="sexo" value="masculino">
+                    <label for="sexoMasc">Masculino</label>
+                </div>
+                 <div>
+                    <input type="radio" id="sexoFem" name="sexo" value="feminino">
+                    <label for="sexoFem">Feminino</label>
+                 </div>
+             </div>
+        </div>
+
         <button id="calcularBtn">Calcular IMC</button>
 
         <div id="resultado" class="resultado-area" style="display: none;">
-            <h2>Seu Resultado:</h2>
+            <h2>Resultado:</h2>
             <p id="imcValor"></p>
-            <p id="imcClassificacao"></p>
-        </div>
+            <p id="imcInterpretacao"></p> <p id="infoAdicional" class="info-adicional"></p> </div>
 
         <div id="erro" class="erro-mensagem" style="display: none;">
-            <p>Por favor, preencha peso e altura corretamente.</p>
+            <p>Por favor, preencha todos os campos corretamente.</p>
         </div>
 
-        <div class="info-tabela">
-            <h3>Classificação do IMC (OMS):</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>IMC</th>
-                        <th>Classificação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Abaixo de 18.5</td>
-                        <td>Abaixo do peso</td>
-                    </tr>
-                    <tr>
-                        <td>18.5 - 24.9</td>
-                        <td>Peso normal</td>
-                    </tr>
-                    <tr>
-                        <td>25.0 - 29.9</td>
-                        <td>Sobrepeso</td>
-                    </tr>
-                     <tr>
-                        <td>30.0 - 34.9</td>
-                        <td>Obesidade Grau I</td>
-                    </tr>
-                     <tr>
-                        <td>35.0 - 39.9</td>
-                        <td>Obesidade Grau II</td>
-                    </tr>
-                     <tr>
-                        <td>Acima de 40.0</td>
-                        <td>Obesidade Grau III (Mórbida)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="info-geral">
+            <h3>Entendendo o IMC</h3>
+            <div id="infoAdulto">
+                <h4>Adultos (20+ anos)</h4>
+                <p>O IMC é uma ferramenta de triagem. A classificação padrão da OMS é:</p>
+                <table>
+                    <thead><tr><th>IMC</th><th>Classificação</th></tr></thead>
+                    <tbody>
+                        <tr><td>Abaixo de 18.5</td><td>Abaixo do peso</td></tr>
+                        <tr><td>18.5 - 24.9</td><td>Peso normal</td></tr>
+                        <tr><td>25.0 - 29.9</td><td>Sobrepeso</td></tr>
+                        <tr><td>30.0 - 34.9</td><td>Obesidade Grau I</td></tr>
+                        <tr><td>35.0 - 39.9</td><td>Obesidade Grau II</td></tr>
+                        <tr><td>Acima de 40.0</td><td>Obesidade Grau III</td></tr>
+                    </tbody>
+                </table>
+                 <p class="nota">Nota: Para um mesmo IMC, a composição corporal (gordura vs. músculo) pode variar entre homens e mulheres. Consulte um profissional para avaliação individual.</p>
+            </div>
+            <div id="infoCriancaTexto">
+                 <h4>Crianças e Adolescentes (2-19 anos)</h4>
+                 <p>O IMC é calculado da mesma forma, mas a interpretação depende da idade e sexo da criança, usando <strong>gráficos de percentil de IMC por idade</strong>. Um IMC isolado não é suficiente para diagnóstico.</p>
+                 <p><strong>Consulte um pediatra ou profissional de saúde</strong> para avaliar o crescimento da criança. Ferramentas online (como do CDC ou OMS) podem ajudar a verificar os percentis:</p>
+                 <ul>
+                     <li><a href="https://www.cdc.gov/healthyweight/bmi/calculator.html" target="_blank" rel="noopener noreferrer">Calculadora do CDC (EUA)</a></li>
+                     <li><a href="https://www.who.int/tools/child-growth-standards/standards/body-mass-index-for-age" target="_blank" rel="noopener noreferrer">Padrões da OMS</a></li>
+                 </ul>
+            </div>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+    </div> <script src="script.js"></script>
 </body>
 </html>
